@@ -13,7 +13,7 @@ authentication credentials.
 Example PHP Usage:
 
 ```php
-// YOUR_ACCOUNT: Only the slug name is needed. I.e: http://your_account.basecamphq.com
+// YOUR_ACCOUNT: Only the slug name is needed. (i.e: http://your_account.basecamphq.com)
 // YOUR_API_KEY: The API key given to you from within Basecamp
 // YOUR_USERNAME: you log into your account with
 // YOUR PASSWORD: The password you log into your account with
@@ -25,6 +25,47 @@ $auth = array(
     "password" => "YOUR-PASSWORD"
 );
 
+// Instantiate the object and pass in the credentials.
+
 $basecamp = new Basecamp($auth);
+```
+
+For developer convenience the constructor method accepts either authentication elements via an array, or a simple string containing only the basecamp api key.
+
+If using the api key only, you'll need to use the authentication
+setter methods after you have instantiated the class object.
+
+Example:
+
+```php
+$basecamp = new Basecamp(YOUR_API_KEY);
+$basecamp -> setAccount(YOUR_ACCOUNT);
+$basecamp -> setUser(YOUR_USERNAME);
+$basecamp -> setPassword(YOUR_PASSWORD);
+
+These methods are also chainable:
+
+$basecamp->setAccount()->setUser()->setPassword();
+```
+
+Using the Wrapper
+---------------
+
+Once the wrapper has been instantiated, query calls are straight forward:
+
+```php
+$basecamp->getUsers(); // Returns all of the user's projects
 $basecamp->getProjects(); // Returns all of the user's projects
+$basecamp->getProject(PROJECT_ID); // Returns a single project with matched ID
+$basecamp->getFiles(PROJECT_ID); // Returns all the files from project with matched ID
+```
+
+Loop through all of the user's projects:
+
+```php
+foreach($basecamp->getProjects() as $project):
+	echo $project->name;
+	echo $project->id;
+	echo $project->status;
+endforeach;
 ```
