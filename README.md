@@ -54,7 +54,7 @@ $basecamp->setAccount()->setUser()->setPassword();
 Using the Wrapper
 ---------------
 
-Once the wrapper has been instantiated, query calls are straight forward:
+Once the wrapper has been instantiated, query calls are pretty straight forward:
 
 ```php
 $basecamp->getCompanies(); // Returns all companies
@@ -62,7 +62,7 @@ $basecamp->getFiles(PROJECT_ID); // Returns all the files from project with matc
 $basecamp->getUsers(); // Returns all of the user's projects
 $basecamp->getProjects(); // Returns all of the user's projects
 $basecamp->getProject(PROJECT_ID); // Returns a single project with matched ID
-$basecamp->getTodoLists(TODO_LIST_ID); // Returns all items for a given todo list
+$basecamp->getTodoItems(TODO_LIST_ID); // Returns all items for a given todo list
 $basecamp->getTodoLists(); // Returns all todo lists the user has access to
 ```
 
