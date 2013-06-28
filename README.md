@@ -1,5 +1,5 @@
-Basecamp API PHP Wrapper
-=========================
+Basecamp Classic API Wrapper for PHP
+======================================
 
 A PHP library for easy intergration with the [Basecamp Classic Api](https://github.com/37signals/basecamp-classic-api).
 

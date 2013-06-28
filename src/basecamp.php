@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Basecamp API Wrapper
+ * Basecamp Class API Wrapper for PHP
  *
  * Simple library of methods to interact with the Basecamp Classic API.
  * https://github.com/37signals/basecamp-classic-api
@@ -25,8 +25,8 @@
  * $auth = array(
  *     "account"  => "YOUR_ACCOUNT",
  *     "api_key"  => "YOUR_API_KEY",
- * 	   "user"     => "YOUR_USERNAME",
- * 	   "password" => "YOUR-PASSWORD"
+ *     "user"     => "YOUR_USERNAME",
+ *     "password" => "YOUR-PASSWORD"
  * );
  * 
  * $basecamp = new Basecamp($auth);
@@ -242,9 +242,14 @@ class Basecamp {
  	
  		// Error Handling
 		// Check for the nessessary authentication credientials.
+ 		
+ 		// No authentication data.
+ 		
+ 		if(!$this->isAuthenticated()) throw new Exception('Authentication Failed');
 
- 		if(!$this->isAuthenticated()) throw new Exception('Authentication Failed'); // No authentication data.
-		if(curl_error($curl)) throw new Exception(curl_error($curl)); // cURL connection or formatting error.
+		// cURL connection or formatting error.
+
+		if(curl_error($curl)) throw new Exception(curl_error($curl));
 
  		// Convert response to XML and close the connection
  		// TODO: Seperate the Curl Request and Simple XML Object creation.
