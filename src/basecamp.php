@@ -160,6 +160,17 @@ class Basecamp {
 	}
 
 	/**
+	 * Gets companies for currently authenticated user
+	 *
+	 * @access  public
+	 * @return  object
+	 */
+
+	public function getCompanies() {
+		return $this->request('companies.xml');
+	}
+
+	/**
 	 * Gets projects for currently authenticated user
 	 *
 	 * @access  public
@@ -170,6 +181,18 @@ class Basecamp {
 
 	public function getFiles($project_id, $offset = null) {
 		return $this->request('projects/' . $project_id . '/attachments.xml?n=' . $offset);
+	}
+
+	/**
+	 * Gets messages from a project by ID
+	 *
+	 * @access  public
+	 * @param	Basecamp Project ID (Integer)
+	 * @return  object
+	 */
+
+	public function getMessages($project_id) {
+		return $this->request('projects/' . $project_id . '/posts.xml');
 	}
 
 	/**
@@ -193,6 +216,28 @@ class Basecamp {
 
 	public function getProject($id) {
 		return $this->request('projects/' . $id . '.xml');
+	}
+
+	/**
+	 * Gets all TODO lists for a given user
+	 *
+	 * @access  public
+	 * @return  object
+	 */
+
+	public function getTodoItems($list_id) {
+		return $this->request('todo_lists/' . $list_id . '/todo_items.xml');
+	}
+
+	/**
+	 * Gets all TODO lists for a given user
+	 *
+	 * @access  public
+	 * @return  object
+	 */
+
+	public function getTodoLists() {
+		return $this->request('todo_lists.xml');
 	}
 
 	/**
