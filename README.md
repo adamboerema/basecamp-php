@@ -39,6 +39,7 @@ Example:
 
 ```php
 $basecamp = new Basecamp(YOUR_API_KEY);
+
 $basecamp -> setAccount(YOUR_ACCOUNT);
 $basecamp -> setUser(YOUR_USERNAME);
 $basecamp -> setPassword(YOUR_PASSWORD);
