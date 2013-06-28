@@ -10,7 +10,7 @@
  * @package    Basecamp API Wrapper
  * @author     Purple Rock Scissors <http://www.prpl.rs>
  * @author     Justin Gillespie <justin@prpl.rs>
- * @link       http://link.to/project
+ * @link       https://github.com/prplrs/basecamp-php
  * @license    http://www.php.net/license/3_01.txt  PHP License 3.01
  * @version    0.1
  *
