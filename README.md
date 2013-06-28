@@ -13,8 +13,8 @@ authentication credentials.
 Example PHP Usage:
 
 ```php
-// YOUR_ACCOUNT: Only the slug name is needed. (i.e: http://your_account.basecamphq.com)
-// YOUR_API_KEY: The API key given to you from within Basecamp
+// YOUR_ACCOUNT:  Only the slug name is needed. (i.e: http://your_account.basecamphq.com)
+// YOUR_API_KEY:  The API key given to you from within Basecamp
 // YOUR_USERNAME: you log into your account with
 // YOUR PASSWORD: The password you log into your account with
 
