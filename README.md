@@ -17,7 +17,7 @@ include "path/to/basecamp.php";
 
 // YOUR_ACCOUNT:  Only the slug is needed. (i.e: http://your_account.basecamphq.com)
 // YOUR_API_KEY:  The API key given to you from within Basecamp
-// YOUR_USERNAME: you log into your account with
+// YOUR_USERNAME: The username you log into your account with
 // YOUR PASSWORD: The password you log into your account with
 
 $auth = array(
