@@ -364,8 +364,9 @@ class Basecamp {
 	 */
 
 	private function isAuthenticated() {
-		$result = ($this->account == null || $this->user == null || $this->password == null) ? false : true;
-		return $result;
+		if(!$this->account || !$this->user || !$this->password){
+			throw new Exception('Authentication Failed');
+		}
 	}
 
 	/**
@@ -376,36 +377,41 @@ class Basecamp {
 	 */
 
 	private function request($path) {
-
-		// Set up and send a cURL request.
-		// For more information: http://php.net/manual/en/book.curl.php
-		$curl = curl_init();
-
-		curl_setopt($curl, CURLOPT_URL, $this->url . $path);
-		curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-		curl_setopt($curl, CURLOPT_HTTPGET, 1);
-		curl_setopt($curl, CURLOPT_HEADER, false);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);  
-		curl_setopt($curl, CURLOPT_USERPWD, $this->user . ":" . $this->password);
- 		$response = curl_exec($curl);
+		//Check for authentication
+		try{
+			$this->isAuthenticated();
+		} catch(Exception $e) {
+			echo $e->getMessage();
+			exit;	
+		}
 		
-		
- 		// Error Handling
-		// Check for the nessessary authentication credientials.
- 		
- 		// No authentication data.
- 		if(!$this->isAuthenticated()) throw new Exception('Authentication Failed');
-
-		// cURL connection or formatting error.
-		if(curl_error($curl)) throw new Exception(curl_error($curl));
-		
-		curl_close($curl);
-		
-		//Get cURL results
-		$result = $this->parse($response); 
-
-		//Parse response
-		return $result;
+		try{
+			// Set up and send a cURL request.
+			// For more information: http://php.net/manual/en/book.curl.php
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $this->url . $path);
+			curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+			curl_setopt($curl, CURLOPT_HTTPGET, 1);
+			curl_setopt($curl, CURLOPT_HEADER, false);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);  
+			curl_setopt($curl, CURLOPT_USERPWD, $this->user . ":" . $this->password);
+	 		$response = curl_exec($curl);
+	
+			// cURL connection or formatting error.
+			if(curl_error($curl)) throw new Exception(curl_error($curl));
+			
+			//Close curl
+			curl_close($curl);
+			
+			//Get cURL results
+			$result = $this->parse($response); 
+			//Parse response
+			return $result;
+			
+		} catch(Exception $e){
+			echo $e->getMessage();
+			exit;
+		}
 	}
 
 } // end Basecamp Class
