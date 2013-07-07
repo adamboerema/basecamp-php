@@ -41,6 +41,7 @@ class Basecamp {
 	private $password;
 	private $account;	
 	private $url;
+	private $response_type;
 
 	/**
 	 * Class constructor method sets authentication credentials.
@@ -75,10 +76,10 @@ class Basecamp {
 			$this->setAccount($settings['account']);
 			$this->setUser($settings['user']);
 			$this->setPassword($settings['password']);
+			$this->setResponseType($settings['response']);
 		} else {
 			$this->setApiKey($settings);
 		}
-
 	}
 
 	/**
@@ -145,6 +146,19 @@ class Basecamp {
 	public function setURL($account = null) {
 		$account = isset($account) ? $account : $this->account;
 		$this->url = 'https://' . $account . '.basecamphq.com/';
+		return $this;
+	}
+	
+	/**
+	 * Setter method for response type. Defaults to native xml.
+	 *
+	 * @access  public
+	 * @param	xml, json, array (string)
+	 * @return  class object (chainable)
+	 */
+
+	public function setResponseType($response = null) {
+		($response) ? $this->response_type = $response : $this->response_type = 'xml';
 		return $this;
 	}
 	
@@ -251,7 +265,97 @@ class Basecamp {
 	public function getUsers() {
 		return $this->request('people.xml');
 	}
+	
+	/**
+	 * Convert cURL reponse to xml
+	 *
+	 * @access  private
+	 * @param   cURL request response (string)
+	 * @return  xml
+	 */
+	private function toXml($response){
+		$xml = new SimpleXMLElement($response);
+		return $xml;
+	}
+	
+	/**
+	 * Convert cURL reponse to json
+	 *
+	 * @access  private
+	 * @param   cURL request response (string)
+	 * @return  json
+	 */
 
+	private function toJson($response) {
+		//First convert response to a clean array for json_encode
+		$array = $this->toArray($response);
+		$json = json_encode($array);
+		return $json;
+	}
+	
+	/**
+	 * Convert cURL response to array
+	 *
+	 * @access  private
+	 * @param   cURL request response (string)
+	 * @return  array
+	 */
+	private function toArray($response) {
+		//First convert response to native xml
+		$xml = new SimpleXMLElement($response);
+		$array = $this->xmlToArray($xml);
+		
+		return $array;
+	}
+	
+	/**
+	 * Convert xml to array
+	 *
+	 * @access  private
+	 * @param   xml object
+	 * @return  json
+	 */
+	private function xmlToArray($xml) {
+		//Decode to json and then parse into an array
+		$array = json_decode(json_encode($xml), true);
+        
+		//Refine the array
+        foreach (array_slice($array, 0) as $key => $value ) {
+            if (empty($value)) {
+            	$array[$key] = null;
+			} elseif (is_array($value)) {
+				$array[$key] = $this->xmlToArray($value);
+			}
+        }
+
+        return $array;
+	}	
+	
+	/**
+	 * Parse results from cURL request
+	 *
+	 * @access  private
+	 * @return  object
+	 */
+	private function parse($response) {
+		
+		switch($this->response_type){
+			case 'json': 
+				$result = $this->toJson($response);
+			break;
+			
+			case 'array':
+				$result = $this->toArray($response);
+			break;
+			
+			default:
+				$result = $this->toXml($response);
+			break;
+
+		}
+		return $result;
+	}
+	
 	/**
 	 * Checks for authentication credentials.
 	 *
@@ -275,7 +379,6 @@ class Basecamp {
 
 		// Set up and send a cURL request.
 		// For more information: http://php.net/manual/en/book.curl.php
-
 		$curl = curl_init();
 
 		curl_setopt($curl, CURLOPT_URL, $this->url . $path);
@@ -284,27 +387,25 @@ class Basecamp {
 		curl_setopt($curl, CURLOPT_HEADER, false);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);  
 		curl_setopt($curl, CURLOPT_USERPWD, $this->user . ":" . $this->password);
- 	
+ 		$response = curl_exec($curl);
+		
+		
  		// Error Handling
 		// Check for the nessessary authentication credientials.
  		
  		// No authentication data.
- 		
  		if(!$this->isAuthenticated()) throw new Exception('Authentication Failed');
 
 		// cURL connection or formatting error.
-
 		if(curl_error($curl)) throw new Exception(curl_error($curl));
-
- 		// Convert response to XML and close the connection
- 		// TODO: Seperate the Curl Request and Simple XML Object creation.
-
-		$xml = new SimpleXMLElement(curl_exec($curl));
-		
- 		// Close the cURL connection
 		
 		curl_close($curl);
-		return $xml;
+		
+		//Get cURL results
+		$result = $this->parse($response); 
+
+		//Parse response
+		return $result;
 	}
 
 } // end Basecamp Class
