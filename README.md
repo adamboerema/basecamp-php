@@ -75,3 +75,19 @@ foreach($basecamp->getProjects() as $project):
 	echo $project->status;
 endforeach;
 ```
+
+
+Response Types (Added 7/7/13)
+-------------
+
+You can now retrieve the response in xml, array, or json format.
+All requests will initially default to xml if no response type is set.
+
+Call this method before your api call
+
+```php
+
+$format = 'json' // or xml or array
+
+$basecamp->setResponseType($format);
+```
