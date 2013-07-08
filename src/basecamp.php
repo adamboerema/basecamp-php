@@ -382,7 +382,6 @@ class Basecamp {
 			$this->isAuthenticated();
 		} catch(Exception $e) {
 			echo $e->getMessage();
-			exit;	
 		}
 		
 		try{
@@ -410,7 +409,6 @@ class Basecamp {
 			
 		} catch(Exception $e){
 			echo $e->getMessage();
-			exit;
 		}
 	}
 
