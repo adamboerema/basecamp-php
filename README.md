@@ -77,17 +77,19 @@ endforeach;
 ```
 
 
-Response Types (Added 7/7/13)
+Response Type
 -------------
 
 You can now retrieve the response in xml, array, or json format.
 All requests will initially default to xml if no response type is set.
 
-Call this method before your api call
+Call this method before your api call. This method is also chainable.
 
 ```php
 
 $format = 'json' // or xml or array
-
 $basecamp->setResponseType($format);
+
+//Using method chaining
+$basecamp->setResponseType($format)->getUsers();
 ```
