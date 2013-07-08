@@ -267,6 +267,33 @@ class Basecamp {
 	}
 	
 	/**
+	 * Returns individual user based on search and search value.
+	 *
+	 * @access  public
+	 * @param	Search parameter (string)
+	 * @param	Search value ()
+	 * @return  object
+	 */
+
+	public function getUser($search, $value) {
+		return $this->request('people.xml');
+	}
+	
+	/**
+	 * Convert cURL reponse to xml
+	 *
+	 * @access  private
+	 * @param   cURL request response
+	 * @param   search type (string)
+	 * @param	search value  (string)
+	 * @return  xml
+	 */
+	public function search($response, $search, $value){
+		$xml = new SimpleXMLElement($response);
+		
+	}
+
+	/**
 	 * Convert cURL reponse to xml
 	 *
 	 * @access  private
@@ -402,8 +429,10 @@ class Basecamp {
 			//Close curl
 			curl_close($curl);
 			
+			$result = $this->search($response, 'name', )
+			
 			//Get cURL results
-			$result = $this->parse($response); 
+			//$result = $this->parse($response); 
 			//Parse response
 			return $result;
 			
